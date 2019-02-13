@@ -1,0 +1,78 @@
+import java.util.Collections;
+import java.util.ArrayList;
+
+public class Baralho {
+	private ArrayList<Carta> Cartas;
+
+	public Baralho(){
+		this.Cartas = new ArrayList<Carta>();
+		this.Cartas.add( new Carta("A PICAFUMO", Naipe.PICAFUMO.getValor(), Valor.A.getValor()));
+		this.Cartas.add( new Carta("2 PICAFUMO", Naipe.PICAFUMO.getValor(), Valor.DOIS.getValor()));     
+		this.Cartas.add( new Carta("3 PICAFUMO", Naipe.PICAFUMO.getValor(), Valor.TRES.getValor()));     
+		this.Cartas.add( new Carta("4 PICAFUMO", Naipe.PICAFUMO.getValor(), Valor.QUATRO.getValor()));     
+		this.Cartas.add( new Carta("5 PICAFUMO", Naipe.PICAFUMO.getValor(), Valor.CINCO.getValor()));     
+		this.Cartas.add( new Carta("6 PICAFUMO", Naipe.PICAFUMO.getValor(), Valor.SEIS.getValor()));     
+		this.Cartas.add( new Carta("7 PICAFUMO", Naipe.PICAFUMO.getValor(), Valor.SETE.getValor()));     
+		this.Cartas.add( new Carta("Q PICAFUMO", Naipe.PICAFUMO.getValor(), Valor.Q.getValor()));     
+		this.Cartas.add( new Carta("J PICAFUMO", Naipe.PICAFUMO.getValor(), Valor.J.getValor()));
+		this.Cartas.add( new Carta("K PICAFUMO", Naipe.PICAFUMO.getValor(), Valor.K.getValor()));
+		
+		
+		this.Cartas.add( new Carta("A ESPADILHA", Naipe.ESPADILHA.getValor(), Valor.A.getValor()));
+		this.Cartas.add( new Carta("2 ESPADILHA", Naipe.ESPADILHA.getValor(), Valor.DOIS.getValor()));     
+		this.Cartas.add( new Carta("3 ESPADILHA", Naipe.ESPADILHA.getValor(), Valor.TRES.getValor()));     
+		this.Cartas.add( new Carta("4 ESPADILHA", Naipe.ESPADILHA.getValor(), Valor.QUATRO.getValor()));     
+		this.Cartas.add( new Carta("5 ESPADILHA", Naipe.ESPADILHA.getValor(), Valor.CINCO.getValor()));     
+		this.Cartas.add( new Carta("6 ESPADILHA", Naipe.ESPADILHA.getValor(), Valor.SEIS.getValor()));     
+		this.Cartas.add( new Carta("7 ESPADILHA", Naipe.ESPADILHA.getValor(), Valor.SETE.getValor()));     
+		this.Cartas.add( new Carta("Q ESPADILHA", Naipe.ESPADILHA.getValor(), Valor.Q.getValor()));     
+		this.Cartas.add( new Carta("J ESPADILHA", Naipe.ESPADILHA.getValor(), Valor.J.getValor()));
+		this.Cartas.add( new Carta("K ESPADILHA", Naipe.ESPADILHA.getValor(), Valor.K.getValor()));
+		
+		this.Cartas.add( new Carta("A COPAS", Naipe.COPAS.getValor(), Valor.A.getValor()));
+		this.Cartas.add( new Carta("2 COPAS", Naipe.COPAS.getValor(), Valor.DOIS.getValor()));     
+		this.Cartas.add( new Carta("3 COPAS", Naipe.COPAS.getValor(), Valor.TRES.getValor()));     
+		this.Cartas.add( new Carta("4 COPAS", Naipe.COPAS.getValor(), Valor.QUATRO.getValor()));     
+		this.Cartas.add( new Carta("5 COPAS", Naipe.COPAS.getValor(), Valor.CINCO.getValor()));     
+		this.Cartas.add( new Carta("6 COPAS", Naipe.COPAS.getValor(), Valor.SEIS.getValor()));     
+		this.Cartas.add( new Carta("7 COPAS", Naipe.COPAS.getValor(), Valor.SETE.getValor()));     
+		this.Cartas.add( new Carta("Q COPAS", Naipe.COPAS.getValor(), Valor.Q.getValor()));     
+		this.Cartas.add( new Carta("J COPAS", Naipe.COPAS.getValor(), Valor.J.getValor()));
+		this.Cartas.add( new Carta("K COPAS", Naipe.COPAS.getValor(), Valor.K.getValor()));
+		
+		this.Cartas.add( new Carta("A ZAP", Naipe.ZAP.getValor(), Valor.A.getValor()));
+		this.Cartas.add( new Carta("2 ZAP", Naipe.ZAP.getValor(), Valor.DOIS.getValor()));     
+		this.Cartas.add( new Carta("3 ZAP", Naipe.ZAP.getValor(), Valor.TRES.getValor()));     
+		this.Cartas.add( new Carta("4 ZAP", Naipe.ZAP.getValor(), Valor.QUATRO.getValor()));     
+		this.Cartas.add( new Carta("5 ZAP", Naipe.ZAP.getValor(), Valor.CINCO.getValor()));     
+		this.Cartas.add( new Carta("6 ZAP", Naipe.ZAP.getValor(), Valor.SEIS.getValor()));     
+		this.Cartas.add( new Carta("7 ZAP", Naipe.ZAP.getValor(), Valor.SETE.getValor()));     
+		this.Cartas.add( new Carta("Q ZAP", Naipe.ZAP.getValor(), Valor.Q.getValor()));     
+		this.Cartas.add( new Carta("J ZAP", Naipe.ZAP.getValor(), Valor.J.getValor()));
+		this.Cartas.add( new Carta("K ZAP", Naipe.ZAP.getValor(), Valor.K.getValor()));
+		
+	}
+	
+	public Carta pegarUmaCarta () {
+		return this.Cartas.remove(0);
+	}
+	
+	public void devolverCartasProBaralho (ArrayList<Carta> c) {
+		for (int i = 0; i < c.size();  i++ ) {
+			this.Cartas.add(c.get(i));
+		}
+	}
+	
+	public void devolverUmaCartaProBaralho (Carta Carta) {
+		this.Cartas.add(Carta);
+	}
+	
+	public String contaCarta() {
+		return Integer.toString(this.Cartas.size());
+	}
+	
+	public void embaralhar(){
+		Collections.shuffle(this.Cartas);
+	}
+
+}
