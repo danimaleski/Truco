@@ -1,0 +1,65 @@
+import java.util.ArrayList;
+
+public class Jogador {
+	public String Nome;
+	protected ArrayList <Carta> Cartas;
+	protected Carta CartaRodada;
+	public Boolean UltimoDealer;
+	protected int Time;
+	
+	
+	public Jogador(String nome, int time) {
+		this.Nome= nome;
+		this.UltimoDealer = false;
+		this.Cartas = new ArrayList <Carta>();
+		this.Time= time;
+	}
+
+
+	public void recebeCarta(Carta carta) {
+		this.Cartas.add(carta);
+	}
+	
+	public ArrayList <Carta> devolveCartas() {
+		ArrayList <Carta> c = new ArrayList <Carta>();
+		for (int i = 0; i<this.Cartas.size(); i ++){
+			c.add(this.Cartas.get(i));
+		}
+		this.Cartas.clear();
+		return c;
+	}
+	
+	public boolean decisaoTrucar() {
+		// AQUI ENTRA UMA INTERACAO PARA DECISAO. 
+		return Utils.numeroAleatorio(0, 1) == 1;
+	}
+	
+	public boolean decisaoAceitarTruco() {
+		// AQUI ENTRA UMA INTERACAO PARA DECISAO. 
+		return Utils.numeroAleatorio(0, 1) == 1;
+	}
+	
+	public Carta jogaCarta() {
+		// AQUI ENTRA UMA INTERACAO PARA DECISAO. 
+		this.CartaRodada = Cartas.get(0);
+		this.Cartas.remove(0);
+		return this.CartaRodada;
+	}
+	
+	public void setaDealer() {
+		this.UltimoDealer = true;
+	}
+	
+	public void setaNaoDealer() {
+		this.UltimoDealer = false;
+	}
+	
+	public int getTime() {
+		return this.Time;
+	}
+	
+	public Carta getUltimaCarta() {
+		return this.CartaRodada;
+	}
+	
+}
