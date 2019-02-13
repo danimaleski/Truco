@@ -1,0 +1,197 @@
+import java.util.ArrayList;
+
+public class Rodada {
+	private boolean Empachado;
+	private boolean Trucado;
+	private boolean TrucoAceito;
+	private int Pontos;
+	private int TurnoA;
+	private int TurnoB;
+	private Jogador JogadorAcao;
+	private Jogador Vencedor;
+	private Carta CartaVencedora;
+	private ArrayList <Carta> CartasTurno;
+	private ArrayList <Carta> ManilhasTurno = new  ArrayList <Carta>();
+	private Carta Manilha;
+	private int Turno;
+	private boolean Finalizada;
+	
+	
+	public Rodada(){
+		this.Empachado = false;
+		this.Trucado = false;
+		this.TrucoAceito = false;
+		this.Vencedor = null;
+		this.CartasTurno = new ArrayList <Carta>();
+		this.ManilhasTurno = new  ArrayList <Carta>();
+		this.Manilha = null;
+		this.Turno = 0;
+		this.Pontos = 1;		
+		this.Finalizada = false;
+		this.TurnoA=0;
+		this.TurnoB=0;
+	}
+	
+	public void jogadorPediutruco(Jogador j) {
+		this.JogadorAcao = j;
+		this.Trucado = true;
+		this.TrucoAceito = false;
+	}
+	
+	public void jogadorAceitouTruco() {
+		this.TrucoAceito = true;
+		this.Trucado = false;
+		this.somaPontos();
+	}
+	
+	public void jogadorCorreu() {
+		this.TrucoAceito = false;
+		this.Trucado = false;
+		this.Vencedor = this.JogadorAcao;
+		this.finalizarRodada();
+	}
+		
+	public boolean rodadaFinalizada() {
+		return this.Finalizada;
+	}
+	
+	public void defineManilhaRodada (Carta carta) {
+		this.Manilha = carta;
+	}
+	
+	public Carta getManilha () {
+		return this.Manilha;
+	}
+	
+	public ArrayList<Carta> devolveCartasTurno () {
+		ArrayList <Carta> c = new ArrayList <Carta>();
+		for (int i = 0; i<this.CartasTurno.size(); i ++){
+			c.add(this.CartasTurno.get(i));
+		}
+		this.CartasTurno.clear();
+		System.out.println("CARTAS DO TURNO" + Integer.toString(c.size()));
+		return c;
+	}
+	
+	public void recebeCartaJogador (Carta carta) {
+		this.CartasTurno.add(carta);
+	}
+	
+	public void definirVencedorDoTurno(ArrayList<Jogador> Jogadores){
+		this.verificarManilhasTurno();
+		if (this.ManilhasTurno.size() == 1) {
+			this.setaCartaVencedora(this.ManilhasTurno.get(0));
+			this.setaJogadorVencedor(Jogadores);
+		}else if (this.ManilhasTurno.size() > 1) {
+			this.setaCartaVencedora(this.comparaManihlhas());
+			this.setaJogadorVencedor(Jogadores);
+		} else {
+			
+			// AQUI ENTRARIAM REGRAS PARA VERIFICAR SETAR EMPACHE.
+			this.setaCartaVencedora(this.comparaCartasNormais());
+			this.setaJogadorVencedor(Jogadores);
+		}
+		this.atualizaPontosTurnos();
+		System.out.println("Time Turno:" + Integer.toString(this.getTimeVencedor()));
+	}
+
+	private void atualizaPontosTurnos() {
+		this.Turno++;
+		if (this.Empachado) { // SE O JOGO TIVER NA CONDICAO DE EMPACHADO GANHA QUEM FIZER A PRIMEIRA.
+			if (this.Vencedor!= null) {
+				this.finalizarRodada();
+			}
+		}  else {
+			if (this.Vencedor!= null && this.Vencedor.getTime() == 1)
+				this.TurnoA++;
+			else if (this.Vencedor != null) {
+				TurnoB++;
+			}
+			else {
+				if (this.Turno > 1) // se empachar depois do primeiro turno ganha quem fez a primeira. 
+				this.finalizarRodada();
+				else 
+				{
+					this.Empachado = true; 
+				}
+			}
+		}
+		if (this.TurnoA == 2 || this.TurnoB == 2 || this.Turno == 3)
+			this.finalizarRodada();
+	}
+	
+	private void finalizarRodada() {
+		this.Finalizada =true;
+	}
+
+	// REVER O METODO POIS AQUI ENTRAM VERIFICACOES DE EMPATE. 
+	private Carta comparaCartasNormais() {
+		Carta maior = this.CartasTurno.get(0);
+		for (int i = 1; i < this.CartasTurno.size() ; i++) {
+			if (maior.Valor < this.CartasTurno.get(i).Valor){
+				maior = this.CartasTurno.get(i);
+			}
+		}
+		return maior;
+	}
+			
+	private Carta comparaManihlhas() {
+		Carta maior = this.ManilhasTurno.get(0);
+		for (int i = 1; i < this.ManilhasTurno.size() ; i++) {
+			if (maior.Naipe < this.ManilhasTurno.get(i).Naipe){
+				maior = this.ManilhasTurno.get(i);
+			}
+		}
+		return maior;
+	}
+
+	private void setaCartaVencedora(Carta carta) {
+		this.CartaVencedora = carta;
+		
+	}
+
+	private void setaJogadorVencedor(ArrayList<Jogador> Jogadores) {
+		for (int i = 0 ; i< Jogadores.size(); i++) {
+			if (Jogadores.get(i).getUltimaCarta().Valor == this.CartaVencedora.Valor && Jogadores.get(i).getUltimaCarta().Naipe == this.CartaVencedora.Naipe)
+				this.Vencedor = Jogadores.get(i);	
+		}
+		
+	}
+
+	private void verificarManilhasTurno() {
+		for (int i = 1 ; i< this.CartasTurno.size(); i++) {
+			if (ehManilha(this.CartasTurno.get(i)))
+				this.ManilhasTurno.add(this.CartasTurno.get(i));
+		}
+	}
+
+	private boolean ehManilha (Carta c) {
+		return (this.Manilha.Valor + 1 == c.Valor);
+	}
+	
+	
+	private void somaPontos() {
+		if (this.Pontos == 1)
+			this.Pontos = 3;
+		else 
+			this.Pontos = this.Pontos +3;
+	}
+	
+	public int getPontos() {
+		return this.Pontos;
+	}
+	
+	public int getTimeVencedor() {
+		return this.Vencedor.getTime();
+	}
+		
+	public boolean precisaAceitarOuCorrer() {
+		return (this.Trucado && !this.TrucoAceito);
+	}
+	
+	public boolean aindaPodeTrucar() {
+		return (!this.Trucado && this.Pontos<12 && !this.Finalizada);
+	}
+}
+	
+	
