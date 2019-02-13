@@ -1,0 +1,25 @@
+public class JogadorCpu extends Jogador {
+
+	public JogadorCpu(String nome, int time) {
+		super(nome, time);
+		// TODO Auto-generated constructor stub
+	}
+	
+	@Override
+	public boolean decisaoTrucar() {		
+		return Utils.numeroAleatorio(0, 1) == 1;
+	}
+	
+	@Override
+	public boolean decisaoAceitarTruco() {
+		return Utils.numeroAleatorio(0, 1) == 2;
+	}
+	
+	@Override
+	public Carta jogaCarta() {
+		this.CartaRodada = Cartas.get(0);
+		this.Cartas.remove(0);
+		return this.CartaRodada;
+	}
+	
+}
