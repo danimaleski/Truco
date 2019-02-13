@@ -1,0 +1,167 @@
+import java.util.ArrayList;
+
+public class Truco {
+	ArrayList<Jogador> Jogadores;
+	ArrayList<Rodada> Rodadas;
+	Baralho Baralho;
+	int PontosA;
+	int PontosB;
+	Boolean JogoFinalizado;
+	Boolean Dupla;
+	
+	public Truco(boolean Dupla){
+		this.Jogadores = new ArrayList<Jogador>();
+		this.Rodadas = new ArrayList<Rodada>();
+		this.JogoFinalizado = false;
+		this.Baralho = new Baralho();
+		this.Dupla = Dupla;
+		this.PontosA = 0;
+		this.PontosB = 0;
+	}
+	
+	
+	public void jogar(){
+		this.adicionarJogodaores();
+		System.out.println("VAI INICIAR O  JOGO\n");
+		while (!this.verificarFimdoJogo()) {
+			System.out.println("INICIOU RODADA");
+			//ARMAZENARA AS RODADAS.
+			Rodada R = new Rodada();
+			this.Baralho.embaralhar();
+			this.distribuirCartasJogadores();
+			R.defineManilhaRodada(this.Baralho.pegarUmaCarta());
+			
+			System.out.println("VIROU " + R.getManilha().Nome);
+			while (!R.rodadaFinalizada()) {
+				// AQUI VAO TODAS AS ACOES DE UM TURNO.
+				
+				// JOGADORES PODEM TRUCAR / PEDIR SEIS / NOVE / 12 CASO SEJA POSSIVEL.
+				// CASO ESTEJA TRUCADO TEM QUE RESPONDER SE ACEITA OU NAO.
+				for (int i = 0; i <this.Jogadores.size(); i++)
+				{
+					if (R.aindaPodeTrucar() && this.PontosA < 11 && this.PontosB <11 ) 
+					{
+						if(this.Jogadores.get(i).decisaoTrucar()){
+							R.jogadorPediutruco(this.Jogadores.get(i));
+							System.out.println("TRUCOOOOO");
+						}
+						else {
+							System.out.println("NAO TRUCOU");
+						}
+					}
+					// Verificar se rodada esta trucada para aceitar ou nao. 
+					if (R.precisaAceitarOuCorrer())
+					{
+						if(this.Jogadores.get(i).decisaoAceitarTruco()){
+							R.jogadorAceitouTruco();
+							System.out.println("TRUCO ACEITO ");
+						}
+						else {
+							R.jogadorCorreu();
+							System.out.println("JOGADOR CORREU.");
+						}
+					}
+					
+					//VALIDACAO FINAL PARA CASO AINDA EXISTAM ACOES E o ARRAY ESTEJA NO FINAL 
+					if (R.precisaAceitarOuCorrer() && i == 3)
+						i = 0;
+					
+				};
+				// CADA JOGADOR JOGA SUA CARTA CASO A RODADA AINDA ESTEJA VALENDO. 
+				if (!R.rodadaFinalizada()){
+					System.out.println("VAI JOGAR CARTAS");
+					for (int i = 0; i <this.Jogadores.size(); i++)
+					{
+						R.recebeCartaJogador(this.Jogadores.get(i).jogaCarta());
+					};
+					// Verificar vencedor do turno e atualizar informações.
+					R.definirVencedorDoTurno(this.Jogadores);
+					//devolver cartas do turno para o baralho. 	
+					
+					
+					ArrayList<Carta> c = new ArrayList<Carta>(); 
+					c = R.devolveCartasTurno();
+					this.Baralho.devolverCartasProBaralho(c);
+				}
+				
+			}
+			
+			//devolve cartas dos jogadores ao baralho caso existam. 
+			for (int j =0; j < this.Jogadores.size(); j++ ){
+				this.Baralho.devolverCartasProBaralho(this.Jogadores.get(j).devolveCartas());
+			}
+			
+			//inclui a manilha novamente no baralho.
+			this.Baralho.devolverUmaCartaProBaralho(R.getManilha());
+			
+			// atualiza pontos da partida. 
+			
+			System.out.println("Pontos Rodada:" + Integer.toString(R.getPontos()));
+			System.out.println("Time Rodada:" + Integer.toString(R.getTimeVencedor()));
+			this.atualizarPontosPartida(R.getPontos(), R.getTimeVencedor());
+			this.Rodadas.add(R);
+			
+			System.out.println(this.Baralho.contaCarta());
+			System.out.println("Pontos A:" + Integer.toString(this.PontosA));
+			System.out.println("Pontos B:" + Integer.toString(this.PontosB));
+			System.out.println("----------");
+		}
+		System.out.println("FIM DE JOGO");
+		int v = this.getVencedor();
+		System.out.println("VENCEDOR: TIME" +  Integer.toString(v));
+		
+	}	
+	
+	private int getPontosTime(int time) {
+		if (time == 1)
+			return this.PontosA;
+		else 
+			return this.PontosB;
+	}
+	
+	private void atualizarPontosPartida(int pontos, int timeVencedor) {
+		if (timeVencedor == 1)
+			this.PontosA = this.PontosA + pontos;
+		else 
+			this.PontosB = this.PontosB + pontos;		
+	}
+
+
+	private void adicionarJogodaores() {
+		this.Jogadores.add(new JogadorCpu("Player1", 1));
+		this.Jogadores.add(new JogadorCpu("Player2", 2));
+		if (this.Dupla) {
+			this.Jogadores.add(new JogadorCpu("Player3", 1));
+			this.Jogadores.add(new JogadorCpu("Player4", 2));
+		}
+		
+	}
+	
+	
+	public void	distribuirCartasJogadores(){
+		for (int i = 0; i< 3 ; i++){
+			for (int j =0; j < this.Jogadores.size(); j++ ){
+				this.Jogadores.get(j).recebeCarta(this.Baralho.pegarUmaCarta());
+			}
+		}
+	}
+	
+	public boolean verificarFimdoJogo(){
+		if (this.PontosA >= 12 || this.PontosB >= 12){
+			this.JogoFinalizado = true;
+			
+		}
+
+		return this.JogoFinalizado;
+		
+	}
+	
+	public int getVencedor(){
+		if (this.PontosA >= 12 ){
+			return 1;
+		}
+		else 
+			return 2;
+		
+	}
+}
