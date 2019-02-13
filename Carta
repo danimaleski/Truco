@@ -1,0 +1,14 @@
+public class Carta {
+	String Nome; 
+	int Naipe; 
+	int Valor;
+ 	
+	
+	public Carta(String Nome, int Naipe, int Valor) 
+	{
+		this.Nome = Nome;
+		this.Naipe = Naipe;
+		this.Valor = Valor;
+
+	}
+}
